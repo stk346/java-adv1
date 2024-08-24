@@ -1,0 +1,31 @@
+package thread.executor.future;
+
+import java.util.Random;
+import java.util.concurrent.*;
+
+import static util.MyLogger.log;
+import static util.ThreadUtils.sleep;
+
+public class CallableMainV1 {
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        ExecutorService es = Executors.newFixedThreadPool(1);
+        Future<Integer> future = es.submit(new MyCallable()); // 여기서 future이 작업을 완료 했을지 못했을지 이해하는 것이 중요!
+        Integer result = future.get();
+        log("result value = " + result);
+        es.shutdown();
+    }
+
+    static class MyCallable implements Callable<Integer> {
+
+        @Override
+        public Integer call() {
+            log("Callable 시작");
+            sleep(2000);
+            int value = new Random().nextInt(10);
+            log("created value = " + value);
+            log("Callable 완료");
+            return value;
+        }
+    }
+}
