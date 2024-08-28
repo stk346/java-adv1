@@ -21,4 +21,17 @@ public abstract class ExecutorUtils {
         }
     }
 
+    public static void printState(ExecutorService service, String taskName) {
+
+        if (service instanceof ThreadPoolExecutor poolExecutor) {
+            int pool = poolExecutor.getPoolSize();
+            int active = poolExecutor.getActiveCount();
+            int queuedTasks = poolExecutor.getQueue().size(); // 작업 대기 큐에 쓰레드가 얼마나 들어가 있는지
+            long completedTasks = poolExecutor.getCompletedTaskCount();
+            log(taskName + " -> [pool=" + pool + ", active=" + active +
+                    ", queuedTasks=" + queuedTasks + ", completedTasks=" + completedTasks + "]");
+        } else {
+            log(service);
+        }
+    }
 }
